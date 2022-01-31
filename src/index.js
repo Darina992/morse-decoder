@@ -38,50 +38,41 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-  let arr = expr.split('');
-    let ans = [];
+  re=/(.{10}|.)/g
+  re1=/(.{2}|.)/g
+  let res = expr.match(re);
+  let result = []
+  //console.log(res)
+  for(let i = 0; i < res.length;i++){
+    let n = res[i].match(re1);
+    //console.log(n);
+    let a = n.filter((i) => i !== "00");
+    //console.log(a);
+    let s = [];
+    for(let j = 0; j < a.length;j++){
+      if (a[j] === '10'){
+        s.push('.');
+      } else if (a[j] === '11'){
+        s.push('-');
+      } else {
+        s.push(' ');
+      }
+    }
+    //console.log(s);
 
-    for(let i = 0;i < arr.length;i++){
-      if(Object.values(MORSE_TABLE).indexOf(arr[i]) !== -1){
-        for(let key in MORSE_TABLE){
-          if(arr[i] === MORSE_TABLE[key]){
-            ans.push(key)
-          }
+    //console.log(Object.keys(MORSE_TABLE).indexOf(s.join('')) !== -1)
+    if(Object.keys(MORSE_TABLE).indexOf(s.join('')) !== -1){
+      for(let key in MORSE_TABLE){
+        if(s.join('') === key){
+          result.push(MORSE_TABLE[key])
         }
-      } else {
-        ans.push(' ')
       }
-    }
-    let result = [];
-    //console.log(ans)
-    for(let i = 0;i < ans.length;i++){
-    let res = [];
-    for(let j = 0;j < ans[i].length;j++){
-      //console.log(ans[i][j])
-      if(ans[i][j] === '-'){
-        res.push('11');
-      } else if (ans[i][j] === '.'){
-        res.push('10');
-      } else {
-        res.push('**********');
-      }
-    }
-    //console.log(res.join(''));
-    //console.log(res.join('').length)
-    if(res.join('').length < 10){
-      let l = res.join('').length;
-      for(let i = 0;i < (10 - l);i++){
-        res.unshift('0');
-      }
-      //console.log(res)
-      result.push(res.join(''));
     } else {
-      result.push(res.join(''));
+      result.push(' ');
     }
-
-    }
-    //console.log(result.join(''))
-    return result.join('')
+  }
+  //console.log(result);
+  return result.join('')
 }
 
 module.exports = {
